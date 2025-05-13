@@ -1,0 +1,57 @@
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Thank you for downloading this script.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% This script was written and tested by CrystaL.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+REM %%%%%%%%% Warning: never connect 2 USB keys at the same time (this script automatically recognises a connected USB key).%%%%%%%%%%
+REM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+GUI r
+DELAY 500
+STRING PowerShell
+ENTER
+DELAY 1000
+STRING $usb = Get-WmiObject Win32_LogicalDisk | Where-Object { $_.DriveType -eq 2 } | Select-Object -First 1 -ExpandProperty DeviceID
+DELAY 1000
+ENTER
+DELAY 1000
+STRING $dir = "$usb\Audit_PC"
+DELAY 1000
+ENTER
+STRING New-Item -ItemType Directory -Force -Path $dir
+ENTER
+STRING systeminfo | Out-File "$dir\01_SystemInfo.txt"
+ENTER
+STRING whoami | Out-File "$dir\02_User.txt"
+ENTER
+STRING hostname | Out-File "$dir\03_Hostname.txt"
+ENTER
+STRING ipconfig /all | Out-File "$dir\04_IPConfig.txt"
+ENTER
+STRING Get-NetIPAddress | Out-File "$dir\05_NetIPAddresses.txt"
+ENTER
+STRING netstat -ano | Out-File "$dir\06_ActiveConnections.txt"
+ENTER
+STRING Get-MpComputerStatus | Out-File "$dir\07_AntivirusStatus.txt"
+ENTER
+STRING Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher |
+ENTER
+STRING Out-File "$dir\08_InstalledPrograms.txt"
+ENTER
+STRING net user | Out-File "$dir\09_Users.txt"
+ENTER
+STRING Get-ChildItem "$env:APPDATA\Microsoft\Windows\Recent" |
+ENTER
+STRING Select-Object Name, LastWriteTime |
+ENTER
+STRING Out-File "$dir\10_RecentFiles.txt"
+ENTER
+STRING Write-Host "Audit terminé. Fichiers enregistrés sur la clé USB : $dir"
+ENTER
+DELAY 4000
+ALT F4
+
+
+
+
+
+
+
+
